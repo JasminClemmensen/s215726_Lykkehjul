@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,9 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.s215726_lykkehjul.R
+import com.example.s215726_lykkehjul.ViewModel
 
 @Composable
-fun GamePage(){
+fun GamePage(viewModel:ViewModel, navigate : () -> Unit){
+    val uiState by viewModel.state.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,14 +49,36 @@ fun GamePage(){
         )
 
     }
-    Letters()
-    Lives()
-    Draw()
+    Letters(viewModel::guessCharacter)
+    Lives(uiState.lives)
+    Draw({viewModel.StartNewGame()})
+    Category(uiState.category)
+    ScoreStatus(uiState.playersScore)
+    Button(onClick = navigate) {
+        Text(text = "Spin igen")
+    }
+    WordLine(word = uiState.guessSoFar)
 
 }
 
+
 @Composable
-fun Lives() {
+fun WordLine(word : String){
+    Row() {
+        word.toCharArray().forEach { character ->
+            Text(text = character.toString(),
+                modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .offset(x=30.dp)
+                .offset(y=400.dp),
+                fontSize = 20.sp,
+            )
+        }
+    }
+}
+
+@Composable
+fun Lives(lives : Int) {
     Image(
         painter = painterResource(id = R.drawable.lives),
         contentDescription = "liv",
@@ -62,22 +87,22 @@ fun Lives() {
             .height(30.dp)
             .width(40.dp)
             .offset(y = 530.dp)
-            .offset(x = 140.dp)
+            .offset(x = 100.dp)
     )
     Text (
-        text = " 5 liv tilbage",
+        text = " $lives liv tilbage",
         textAlign = TextAlign.Center,
         color = Color(titleColor.toColorInt()),
         modifier = Modifier
             .offset(y = 540.dp)
-            .offset(x = 175.dp)
+            .offset(x = 130.dp)
 
     )
 }
 
 @Composable
-fun Draw(){
-    Button(onClick = {},
+fun Draw(onDraw :  () -> Unit){
+    Button(onClick = onDraw,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
         modifier = Modifier
             .offset(x = 120.dp)
@@ -95,9 +120,33 @@ fun Draw(){
 }
 
 @Composable
-fun Letters(){
-    Button(onClick = {
-    },
+fun Category(category : String) {
+    Text(
+        text = "Kategorien er: $category ",
+        textAlign = TextAlign.Center,
+        fontSize = 20.sp,
+        color = Color.Gray,
+        modifier = Modifier
+            .offset(y = 460.dp)
+            .offset(x = 80.dp)
+    )
+}
+
+@Composable
+fun ScoreStatus(playersScore : Int){
+    Text(
+        text = "Points: $playersScore",
+        textAlign = TextAlign.Center,
+        color = Color(titleColor.toColorInt()),
+        modifier = Modifier
+            .offset(y = 540.dp)
+            .offset(x = 250.dp)
+    )
+}
+
+@Composable
+fun Letters(onPress : (String) -> Unit){
+    Button(onClick = {onPress("Q")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 1.dp)
@@ -111,8 +160,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("W")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 37.dp)
@@ -126,8 +174,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("E")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 73.dp)
@@ -141,8 +188,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("R")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 109.dp)
@@ -156,8 +202,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("T")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 145.dp)
@@ -171,8 +216,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("Y")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 181.dp)
@@ -186,8 +230,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("U")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 217.dp)
@@ -201,8 +244,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("I")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 253.dp)
@@ -216,8 +258,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("O")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 289.dp)
@@ -231,8 +272,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("P")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 325.dp)
@@ -246,8 +286,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("Å")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 361.dp)
@@ -261,8 +300,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("A")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 1.dp)
@@ -277,8 +315,7 @@ fun Letters(){
         )
 
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("S")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 37.dp)
@@ -292,8 +329,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("D")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 73.dp)
@@ -307,8 +343,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("F")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 109.dp)
@@ -322,8 +357,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("G")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 145.dp)
@@ -337,8 +371,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("H")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 181.dp)
@@ -352,8 +385,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("J")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 217.dp)
@@ -367,8 +399,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("K")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 253.dp)
@@ -382,8 +413,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("L")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 289.dp)
@@ -397,8 +427,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("Æ")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 325.dp)
@@ -412,8 +441,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("Ø")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 361.dp)
@@ -427,8 +455,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("Z")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 73.dp)
@@ -442,8 +469,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("X")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 109.dp)
@@ -457,8 +483,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("C")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 145.dp)
@@ -472,8 +497,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("V")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 181.dp)
@@ -487,8 +511,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("B")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 217.dp)
@@ -502,8 +525,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("N")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 253.dp)
@@ -517,8 +539,7 @@ fun Letters(){
             textAlign = TextAlign.Center
         )
     }
-    Button(onClick = {
-    },
+    Button(onClick = {onPress("M")},
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 289.dp)

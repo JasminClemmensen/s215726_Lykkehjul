@@ -19,11 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.s215726_lykkehjul.R
+import com.example.s215726_lykkehjul.ViewModel
 
 
 val titleColor = "#FA7F72"
 @Composable
-fun StartPage() {
+fun StartPage(viewModel: ViewModel, navigate : () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,7 +43,10 @@ fun StartPage() {
                 .fillMaxSize()
         )
         Wheel()
-        Spin()
+        Spin({viewModel.spinWheel()})
+        Button(onClick = navigate) {
+            Text(text = "Gæt ordet")
+        }
     }
 
 }
@@ -63,9 +67,8 @@ fun Wheel() {
 }
 
 @Composable
-fun Spin(){
-    Button(onClick = {
-    },
+fun Spin(onSpin: () -> Unit){
+    Button(onClick = onSpin,
         shape = RoundedCornerShape(60.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier

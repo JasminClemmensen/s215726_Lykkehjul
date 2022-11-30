@@ -8,6 +8,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.s215726_lykkehjul.ui.theme.GamePage
@@ -19,10 +21,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             //StartPage()
-            GamePage()
-                }
-            }
+           Navigation(ViewModel())
         }
+    }
+}
+
+@Composable
+fun Navigation(viewModel: ViewModel) {
+    var guess = remember {
+        mutableStateOf(true)
+    }
+    if(guess.value) {
+        StartPage(viewModel = viewModel, {guess.value = false})
+    } else {
+        GamePage(viewModel = viewModel, {guess.value = true})
+    }
+}
 
 
 
