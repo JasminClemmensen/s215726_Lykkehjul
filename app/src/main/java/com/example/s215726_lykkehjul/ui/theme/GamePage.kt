@@ -7,22 +7,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.core.graphics.toColorInt
 import com.example.s215726_lykkehjul.R
 import com.example.s215726_lykkehjul.ViewModel
@@ -54,8 +49,15 @@ fun GamePage(viewModel:ViewModel, navigate : () -> Unit){
     Draw({viewModel.StartNewGame()})
     Category(uiState.category)
     ScoreStatus(uiState.playersScore)
-    Button(onClick = navigate) {
-        Text(text = "Spin igen")
+    Button(onClick = navigate,
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+    modifier = Modifier
+        .offset(x=150.dp)
+        .offset(y=210.dp)
+        .height(35.dp)
+        .width(101.dp)) {
+        Text(text = "Spin igen",
+        color = Color.White)
     }
     WordLine(word = uiState.guessSoFar)
 
@@ -92,7 +94,7 @@ fun WordLine(word : String){
     Row() {
         word.toCharArray().forEach { character ->
             Text(text = character.toString(),
-                modifier = Modifier
+               modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .offset(x = 30.dp)
                     .offset(y = 400.dp),
@@ -128,7 +130,8 @@ fun Lives(lives : Int) {
 @Composable
 fun Draw(onDraw :  () -> Unit){
     Button(onClick = onDraw,
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+        shape = RoundedCornerShape(60.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt())),
         modifier = Modifier
             .offset(x = 120.dp)
             .offset(y = 165.dp)
@@ -153,7 +156,7 @@ fun Category(category : String) {
         color = Color.Gray,
         modifier = Modifier
             .offset(y = 460.dp)
-            .offset(x = 80.dp)
+            .offset(x = 90.dp)
     )
 }
 

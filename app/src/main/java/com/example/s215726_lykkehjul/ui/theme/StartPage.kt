@@ -47,8 +47,13 @@ fun StartPage(viewModel: ViewModel, navigate : () -> Unit) {
         )
         Wheel(uiState.wheelField)
         Spin({viewModel.spinWheel()})
-        Button(onClick = navigate) {
-            Text(text = "Gæt ordet")
+        Button(onClick = navigate,
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+            modifier = Modifier
+                .offset(x = 148.dp)
+                .offset(y = 680.dp)) {
+            Text(text = "Gæt ordet",
+            color = Color.White)
         }
     }
 
@@ -60,8 +65,11 @@ fun Wheel(wheelField : Int) {
     val image = when (wheelField) {
         0 -> R.drawable.lykkehjul
         1000 -> R.drawable.lykkehjul2
+        1000 -> R.drawable.lykkehjul3
         2000 -> R.drawable.lykkehjul4
         500 -> R.drawable.lykkehjul5
+        200 -> R.drawable.lykkehjul6
+        500 -> R.drawable.lykkehjul8
         else -> R.drawable.lykkehjul8
     }
     Image(
