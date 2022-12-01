@@ -4,13 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.core.graphics.toColorInt
 import com.example.s215726_lykkehjul.R
 import com.example.s215726_lykkehjul.ViewModel
@@ -59,6 +59,31 @@ fun GamePage(viewModel:ViewModel, navigate : () -> Unit){
     }
     WordLine(word = uiState.guessSoFar)
 
+    if(uiState.lives < 1){
+        AlertDialog(onDismissRequest = {viewModel.StartNewGame() },
+            title = {
+                Text(text = "Du har tabt")
+            },
+            confirmButton = {
+                Button(onClick = { viewModel.StartNewGame() }) {
+                    Text(text = "Spil igen")
+                }
+            }
+        )
+
+    }
+    if(uiState.won) {
+        AlertDialog(onDismissRequest = {viewModel.StartNewGame() },
+            title = {
+                Text(text = "Du har vundet")
+            },
+            confirmButton = {
+                Button(onClick = { viewModel.StartNewGame() }) {
+                    Text(text = "Spil igen")
+                }
+            }
+        )
+    }
 }
 
 
@@ -68,9 +93,9 @@ fun WordLine(word : String){
         word.toCharArray().forEach { character ->
             Text(text = character.toString(),
                 modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .offset(x=30.dp)
-                .offset(y=400.dp),
+                    .padding(horizontal = 10.dp)
+                    .offset(x = 30.dp)
+                    .offset(y = 400.dp),
                 fontSize = 20.sp,
             )
         }

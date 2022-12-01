@@ -16,7 +16,8 @@ class ViewModel() : ViewModel() {
         _state.update { currentState ->
             currentState.copy(
                 playersScore = 0,
-                lives = 5
+                lives = 5,
+                won = false
             )
         }
     }
@@ -50,6 +51,8 @@ class ViewModel() : ViewModel() {
 
 
     fun spinWheel() {
+        if(_state.value.valueField != 0)
+            return
         val valueField = (1..8).random()
         val wheelField = when (valueField) {
             1 -> R.drawable.lykkehjul
@@ -66,6 +69,11 @@ class ViewModel() : ViewModel() {
                 wheelField = wheelField,
                 valueField = valueField
             )
+        }
+        if(valueField == 1) {
+            _state.update {
+                it.copy(playersScore = 0)
+            }
         }
     }
 
@@ -95,16 +103,46 @@ class ViewModel() : ViewModel() {
     }
 
     fun guessCharacter(newCharacter: String) {
-        val x = 8
-    }
+        if(_state.value.valueField == 0)
+            return
+        val word = _state.value.wordToGuess
+        var guessCorrect = false
+        for (i in word.indices) {
+            if(newCharacter[0] == word[i]){
+                guessCorrect = true
+                updateScore()
+                _state.update {
+                    val newGuess = it.guessSoFar.substring(0, i) + newCharacter + it.guessSoFar.substring(i+1)
+                    it.copy(
+                        guessSoFar = newGuess
+                    )
+                }
+            }
+        }
 
+        if(!guessCorrect){
+            _state.update {
+                it.copy(
+                    lives = it.lives -1
+                )
+            }
+        }
 
-    var wordToGuess: String = ""
-
-    fun checkUserGuess() {
-      //  if (wordToGuess.contains(userGuess, ignoreCase = true)) {
-
+        if (won()) {
+            _state.update {
+                it.copy(
+                    won = true
+                )
+            }
+        }
+        _state.update {
+            it.copy(valueField = 0)
         }
     }
-//}
+
+
+    fun won() : Boolean {
+       return !_state.value.guessSoFar.contains("_")
+    }
+}
 

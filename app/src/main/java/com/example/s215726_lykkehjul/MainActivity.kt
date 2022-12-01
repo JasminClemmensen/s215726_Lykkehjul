@@ -12,16 +12,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.s215726_lykkehjul.ui.theme.GamePage
-import com.example.s215726_lykkehjul.ui.theme.S215726_LykkehjulTheme
-import com.example.s215726_lykkehjul.ui.theme.StartPage
+import com.example.s215726_lykkehjul.ui.theme.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            //StartPage()
-           Navigation(ViewModel())
+            Navigation(ViewModel())
+
         }
     }
 }

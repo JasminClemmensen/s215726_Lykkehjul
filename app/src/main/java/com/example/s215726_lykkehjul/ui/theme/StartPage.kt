@@ -8,6 +8,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -25,6 +27,7 @@ import com.example.s215726_lykkehjul.ViewModel
 val titleColor = "#FA7F72"
 @Composable
 fun StartPage(viewModel: ViewModel, navigate : () -> Unit) {
+    val uiState by viewModel.state.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,7 +45,7 @@ fun StartPage(viewModel: ViewModel, navigate : () -> Unit) {
                 .offset(y = 100.dp)
                 .fillMaxSize()
         )
-        Wheel()
+        Wheel(uiState.wheelField)
         Spin({viewModel.spinWheel()})
         Button(onClick = navigate) {
             Text(text = "Gæt ordet")
@@ -53,9 +56,16 @@ fun StartPage(viewModel: ViewModel, navigate : () -> Unit) {
 
 
 @Composable
-fun Wheel() {
+fun Wheel(wheelField : Int) {
+    val image = when (wheelField) {
+        0 -> R.drawable.lykkehjul
+        1000 -> R.drawable.lykkehjul2
+        2000 -> R.drawable.lykkehjul4
+        500 -> R.drawable.lykkehjul5
+        else -> R.drawable.lykkehjul8
+    }
     Image(
-        painter = painterResource(id = R.drawable.lykkehjul),
+        painter = painterResource(id = wheelField),
         contentDescription = "lykkehjul",
         contentScale = ContentScale.Crop,
         modifier = Modifier
