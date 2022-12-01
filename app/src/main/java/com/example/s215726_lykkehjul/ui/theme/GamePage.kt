@@ -56,7 +56,7 @@ fun GamePage(viewModel:ViewModel, navigate : () -> Unit){
         .offset(y=210.dp)
         .height(35.dp)
         .width(101.dp)) {
-        Text(text = "Spin igen",
+        Text(text = "spin igen",
         color = Color.White)
     }
     WordLine(word = uiState.guessSoFar)
@@ -67,8 +67,10 @@ fun GamePage(viewModel:ViewModel, navigate : () -> Unit){
                 Text(text = "Du har tabt")
             },
             confirmButton = {
-                Button(onClick = { viewModel.StartNewGame() }) {
-                    Text(text = "Spil igen")
+                Button(onClick = { viewModel.StartNewGame() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt()))) {
+                    Text(text = "Spil igen",
+                    color= Color.White)
                 }
             }
         )
@@ -80,8 +82,10 @@ fun GamePage(viewModel:ViewModel, navigate : () -> Unit){
                 Text(text = "Du har vundet")
             },
             confirmButton = {
-                Button(onClick = { viewModel.StartNewGame() }) {
-                    Text(text = "Spil igen")
+                Button(onClick = { viewModel.StartNewGame() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(titleColor.toColorInt()))) {
+                    Text(text = "Spil igen",
+                    color = Color.White)
                 }
             }
         )

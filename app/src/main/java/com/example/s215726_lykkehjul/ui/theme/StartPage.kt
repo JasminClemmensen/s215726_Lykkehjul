@@ -52,7 +52,7 @@ fun StartPage(viewModel: ViewModel, navigate : () -> Unit) {
             modifier = Modifier
                 .offset(x = 148.dp)
                 .offset(y = 680.dp)) {
-            Text(text = "Gæt ordet",
+            Text(text = "gæt ordet",
             color = Color.White)
         }
     }
